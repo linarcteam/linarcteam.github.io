@@ -46,6 +46,13 @@ const texts = {
     downloadSoon: 'Em Breve',
     noticias: [
       {
+        id: 'crov',
+        titulo: 'LINARC lançará antivirus Crov dia 27/8',
+        resumo: 'Antivirus Crov será disponibilizado graficamente para Linux apenas, com tecnologia avançada da LINARC.',
+        conteudo: 'A LINARC anuncia o lançamento do antivirus Crov para o dia 27 de agosto de 2025. O software será disponibilizado exclusivamente para sistemas Linux com interface gráfica, desenvolvido com tecnologia própria da equipe. O Crov representa mais um avanço na proteção digital, mantendo a filosofia de código aberto e segurança que caracteriza a LINARC.',
+        data: '15/08/25'
+      },
+      {
         id: 'instagram',
         titulo: 'Linarc tem Instagram agora, @linarcteam',
         resumo: 'A Linarc agora está presente no Instagram! Siga-nos para ficar por dentro de todas as novidades.',
@@ -128,7 +135,7 @@ const texts = {
 <b>Boas Práticas:</b> Nunca divulgamos detalhes técnicos de ataques, exploits ou métodos usados em ações sem permissão. Preferimos linguagem de denúncia, análise de vulnerabilidades públicas e defesa cibernética. Defendemos ética, privacidade e legalidade, e não incentivamos atividades ilegais.<br><br>
 <b>Resumo:</b> O site discute ética, privacidade, defesa e hacking responsável. Não promovemos ações sem permissão. Atuamos sempre de forma responsável e colaborativa.`,
     changeLang: 'Trocar Idioma',
-    aboutExtra: 'Linarc é PV!'
+    aboutExtra: 'LINARC'
   },
   'en': {
     tabs: [
@@ -171,6 +178,13 @@ const texts = {
     antivirusDesc: 'Next-generation antivirus developed by LINARC with proprietary technology and artificial intelligence.',
     downloadSoon: 'Coming Soon',
     noticias: [
+      {
+        id: 'crov',
+        titulo: 'LINARC will launch Crov antivirus on 27/8',
+        resumo: 'Crov antivirus will be available graphically for Linux only, with advanced LINARC technology.',
+        conteudo: 'LINARC announces the launch of Crov antivirus for August 27, 2025. The software will be available exclusively for Linux systems with graphical interface, developed with proprietary team technology. Crov represents another advancement in digital protection, maintaining the open source and security philosophy that characterizes LINARC.',
+        data: '08/15/25'
+      },
       {
         id: 'instagram',
         titulo: 'Linarc now has Instagram, @linarcteam',
@@ -254,7 +268,7 @@ const texts = {
 <b>Best Practices:</b> We never disclose technical details of attacks, exploits or methods used in unauthorized actions. We prefer language of reporting, public vulnerability analysis and cyber defense. We stand for ethics, privacy and legality, and do not encourage illegal activities.<br><br>
 <b>Summary:</b> The site discusses ethics, privacy, defense, and responsible hacking. We do not promote actions without permission. We always act responsibly and collaboratively.`,
     changeLang: 'Change Language',
-    aboutExtra: 'Linarc is PV!'
+    aboutExtra: 'LINARC'
   }
 };
 
@@ -308,6 +322,13 @@ function loadSavedLanguage() {
   if (savedLang && texts[savedLang]) {
     lang = savedLang;
     console.log(`🌐 Idioma carregado: ${savedLang}`);
+    
+    // Atualizar texto da contagem regressiva baseado no idioma salvo
+    const countdownTitle = document.getElementById('countdown-title');
+    if (countdownTitle) {
+      countdownTitle.textContent = savedLang === 'en' ? 'NEW LINARC' : 'NOVA LINARC';
+    }
+    
     renderApp(); // Renderizar o site com o idioma salvo
   } else {
     // Se não há idioma salvo, mostrar tela de seleção
@@ -342,6 +363,13 @@ function selectLanguage(languageCode) {
     lang = languageCode;
     setCookie('selectedLanguage', languageCode, 365);
     console.log(`🌐 Idioma selecionado: ${languageCode}`);
+    
+    // Atualizar texto da contagem regressiva baseado no idioma
+    const countdownTitle = document.getElementById('countdown-title');
+    if (countdownTitle) {
+      countdownTitle.textContent = languageCode === 'en' ? 'NEW LINARC' : 'NOVA LINARC';
+    }
+    
     renderApp(); // Renderizar todo o site no idioma selecionado
   }
 }
@@ -349,6 +377,12 @@ function selectLanguage(languageCode) {
 // Função para voltar à seleção de idioma
 function backToLanguageSelection() {
   showLanguageSelection();
+  
+  // Resetar texto da contagem regressiva para português
+  const countdownTitle = document.getElementById('countdown-title');
+  if (countdownTitle) {
+    countdownTitle.textContent = 'NOVA LINARC';
+  }
 }
 
 // Opções de idioma
@@ -880,6 +914,34 @@ window.switchLancamentoTab = switchLancamentoTab;
 window.abrirNoticia = abrirNoticia;
 window.fecharNoticia = fecharNoticia;
 
+// Função para mostrar spoiler - definida globalmente
+window.showSpoiler = function() {
+  console.log('🎭 Spoiler ativado!');
+  const countdownOverlay = document.getElementById('countdown-overlay');
+  const app = document.getElementById('app');
+  
+  console.log('🔍 Elementos encontrados:', {
+    countdownOverlay: !!countdownOverlay,
+    app: !!app
+  });
+  
+  if (countdownOverlay) {
+    // Adicionar classe para ativar o efeito
+    countdownOverlay.classList.add('spoiler-active');
+    console.log('✅ Classe spoiler-active adicionada');
+    console.log('📋 Classes atuais:', countdownOverlay.className);
+    
+    // Remover o efeito após 3 segundos
+    setTimeout(() => {
+      countdownOverlay.classList.remove('spoiler-active');
+      console.log('🔄 Efeito spoiler removido');
+      console.log('📋 Classes finais:', countdownOverlay.className);
+    }, 3000);
+  } else {
+    console.error('❌ Elemento countdown-overlay não encontrado');
+  }
+};
+
 // Contagem regressiva
 function initCountdown() {
   // Data final: 16 de agosto de 2025 às 19:11
@@ -929,6 +991,22 @@ function init() {
   
   // Inicializar contagem regressiva
   initCountdown();
+  
+  // Testar se o botão SPOILER está funcionando
+  setTimeout(() => {
+    const spoilerBtn = document.querySelector('.spoiler-btn');
+    if (spoilerBtn) {
+      console.log('✅ Botão SPOILER encontrado');
+      // Adicionar listener adicional como backup
+      spoilerBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('🎯 Botão SPOILER clicado via listener');
+        window.showSpoiler();
+      });
+    } else {
+      console.error('❌ Botão SPOILER não encontrado');
+    }
+  }, 1000);
   
   // Carregar idioma salvo ou mostrar seleção
   loadSavedLanguage();

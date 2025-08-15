@@ -1012,91 +1012,27 @@ body {
   margin-bottom: 3rem;
   text-transform: uppercase;
   letter-spacing: 0.5rem;
-  animation: glitch 2s infinite;
+  animation: pulse 3s ease-in-out infinite;
   text-shadow: 
     0 0 10px #0ff,
     0 0 20px #0ff,
     0 0 30px #0ff,
     0 0 40px #0ff;
+  font-family: Arial, sans-serif;
 }
 
-@keyframes glitch {
+@keyframes pulse {
   0% {
-    text-shadow: 
-      0 0 10px #0ff,
-      0 0 20px #0ff,
-      0 0 30px #0ff,
-      0 0 40px #0ff;
-  }
-  10% {
-    text-shadow: 
-      2px 0 10px #f0f,
-      -2px 0 20px #0ff,
-      2px 0 30px #f0f,
-      -2px 0 40px #0ff;
-  }
-  20% {
-    text-shadow: 
-      -2px 0 10px #0ff,
-      2px 0 20px #f0f,
-      -2px 0 30px #0ff,
-      2px 0 40px #f0f;
-  }
-  30% {
-    text-shadow: 
-      0 0 10px #0ff,
-      0 0 20px #0ff,
-      0 0 30px #0ff,
-      0 0 40px #0ff;
-  }
-  40% {
-    text-shadow: 
-      1px 0 10px #f0f,
-      -1px 0 20px #0ff,
-      1px 0 30px #f0f,
-      -1px 0 40px #0ff;
+    opacity: 1;
+    transform: scale(1);
   }
   50% {
-    text-shadow: 
-      -1px 0 10px #0ff,
-      1px 0 20px #f0f,
-      -1px 0 30px #0ff,
-      1px 0 40px #f0f;
-  }
-  60% {
-    text-shadow: 
-      0 0 10px #0ff,
-      0 0 20px #0ff,
-      0 0 30px #0ff,
-      0 0 40px #0ff;
-  }
-  70% {
-    text-shadow: 
-      0.5px 0 10px #f0f,
-      -0.5px 0 20px #0ff,
-      0.5px 0 30px #f0f,
-      -0.5px 0 40px #0ff;
-  }
-  80% {
-    text-shadow: 
-      -0.5px 0 10px #0ff,
-      0.5px 0 20px #f0f,
-      -0.5px 0 30px #0ff,
-      0.5px 0 40px #f0f;
-  }
-  90% {
-    text-shadow: 
-      0 0 10px #0ff,
-      0 0 20px #0ff,
-      0 0 30px #0ff,
-      0 0 40px #0ff;
+    opacity: 0.8;
+    transform: scale(1.05);
   }
   100% {
-    text-shadow: 
-      0 0 10px #0ff,
-      0 0 20px #0ff,
-      0 0 30px #0ff,
-      0 0 40px #0ff;
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -1123,6 +1059,7 @@ body {
     0 0 20px #0ff,
     0 0 30px #0ff;
   margin-bottom: 0.5rem;
+  font-family: Arial, sans-serif;
 }
 
 .countdown-label {
@@ -1131,6 +1068,54 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.2rem;
   opacity: 0.8;
+}
+
+.spoiler-btn {
+  background: linear-gradient(135deg, rgba(255, 0, 0, 0.8), rgba(255, 100, 0, 0.8));
+  color: #fff;
+  border: 2px solid rgba(255, 0, 0, 0.6);
+  border-radius: 25px;
+  padding: 0.8rem 2rem;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.spoiler-btn:hover {
+  background: linear-gradient(135deg, rgba(255, 0, 0, 1), rgba(255, 100, 0, 1));
+  border-color: rgba(255, 0, 0, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+}
+
+.spoiler-btn:active {
+  transform: translateY(0);
+}
+
+/* Efeito de spoiler ativo */
+#countdown-overlay.spoiler-active {
+  opacity: 0.3 !important;
+  transition: opacity 0.5s ease;
+  background: rgba(255, 0, 0, 0.2) !important;
+}
+
+#countdown-overlay.spoiler-active ~ #app {
+  filter: blur(8px);
+  transition: filter 0.5s ease;
+  opacity: 0.8;
+}
+
+/* Estado normal do app (quando não há spoiler) */
+#app {
+  filter: blur(0);
+  transition: filter 0.5s ease;
 }
 
 /* Responsivo para mobile */
@@ -1155,6 +1140,12 @@ body {
   
   .countdown-label {
     font-size: 0.8rem;
+  }
+  
+  .spoiler-btn {
+    font-size: 1rem;
+    padding: 0.7rem 1.5rem;
+    margin-top: 1.5rem;
   }
 }
 
