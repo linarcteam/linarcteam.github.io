@@ -41,8 +41,8 @@ const texts = {
     cofrePassword: 'Senha',
     cofreOpen: 'Abrir Cofre',
     cofreEmpty: 'Nenhum site no cofre ainda.',
-    antivirusTitle: 'Crov - Antivirus Avançado',
-    antivirusDesc: 'Antivirus de última geração desenvolvido pela LINARC com tecnologia própria e inteligência artificial.',
+    antivirusTitle: 'Crov - Analisador de Arquivos',
+    antivirusDesc: 'Analisador de arquivos desenvolvido pela LINARC com verificação SHA256 e detecção de ameaças.',
     downloadSoon: 'Em Breve',
     noticias: [
       {
@@ -61,9 +61,9 @@ const texts = {
       },
       {
         id: 'antivirus',
-        titulo: 'Linarc criou um antivirus',
-        resumo: 'Desenvolvemos um antivirus avançado com tecnologia própria para máxima proteção.',
-        conteudo: 'A Linarc desenvolveu um antivirus de última geração utilizando tecnologia própria e inteligência artificial. O sistema oferece proteção em tempo real contra malware, ransomware e outras ameaças cibernéticas, com interface intuitiva e baixo consumo de recursos.',
+        titulo: 'Linarc criou um analisador de arquivos',
+        resumo: 'Desenvolvemos um analisador de arquivos com verificação SHA256 e detecção de ameaças.',
+        conteudo: 'A Linarc desenvolveu um analisador de arquivos com verificação de integridade SHA256 e detecção de ameaças conhecidas. O sistema analisa arquivos em busca de padrões suspeitos, verifica assinaturas digitais e oferece relatórios detalhados de segurança. Ideal para verificação de arquivos baixados e auditoria de segurança.',
         data: '14/08/25'
       },
       {
@@ -174,8 +174,8 @@ const texts = {
     cofrePassword: 'Password',
     cofreOpen: 'Open Vault',
     cofreEmpty: 'No sites in vault yet.',
-    antivirusTitle: 'Crov - Advanced Antivirus',
-    antivirusDesc: 'Next-generation antivirus developed by LINARC with proprietary technology and artificial intelligence.',
+    antivirusTitle: 'Crov - File Analyzer',
+    antivirusDesc: 'File analyzer developed by LINARC with SHA256 verification and threat detection.',
     downloadSoon: 'Coming Soon',
     noticias: [
       {
@@ -194,9 +194,9 @@ const texts = {
       },
       {
         id: 'antivirus',
-        titulo: 'Linarc created an antivirus',
-        resumo: 'We developed an advanced antivirus with proprietary technology for maximum protection.',
-        conteudo: 'Linarc has developed a next-generation antivirus using proprietary technology and artificial intelligence. The system provides real-time protection against malware, ransomware, and other cyber threats, with an intuitive interface and low resource consumption.',
+        titulo: 'Linarc created a file analyzer',
+        resumo: 'We developed a file analyzer with SHA256 verification and threat detection.',
+        conteudo: 'Linarc has developed a file analyzer with SHA256 integrity verification and known threat detection. The system analyzes files for suspicious patterns, verifies digital signatures, and provides detailed security reports. Ideal for verifying downloaded files and security auditing.',
         data: '08/14/25'
       },
       {
@@ -369,6 +369,9 @@ function selectLanguage(languageCode) {
     if (countdownTitle) {
       countdownTitle.textContent = languageCode === 'en' ? 'NEW LINARC' : 'NOVA LINARC';
     }
+    
+    // Reinicializar contagem regressiva do Crov com novo idioma
+    initCrovCountdown();
     
     renderApp(); // Renderizar todo o site no idioma selecionado
   }
@@ -646,8 +649,8 @@ function renderLancamentos() {
             <div class="lancamento-subtitle">${texts[lang].antivirusTitle}</div>
             <div class="programa-card">
               <p>${texts[lang].antivirusDesc}</p>
-              <button class="download-btn soon" disabled>
-                ${texts[lang].downloadSoon}
+              <button class="download-btn soon" id="crov-download-btn" onclick="downloadCrov()">
+                <span id="crov-countdown-text">${texts[lang].downloadSoon}</span>
               </button>
             </div>
           </div>
@@ -680,6 +683,13 @@ function switchTab(tab) {
   noticiaAberta = null;
   
   renderApp();
+  
+  // Se a aba de lançamentos foi aberta, atualizar contagem do Crov
+  if (tab === 'lancamentos') {
+    setTimeout(() => {
+      initCrovCountdown();
+    }, 100);
+  }
 }
 
 window.switchTab = switchTab;
@@ -913,6 +923,7 @@ window.openCofre = openCofre;
 window.switchLancamentoTab = switchLancamentoTab;
 window.abrirNoticia = abrirNoticia;
 window.fecharNoticia = fecharNoticia;
+window.downloadCrov = downloadCrov;
 
 // Função para mostrar spoiler - definida globalmente
 window.showSpoiler = function() {
@@ -941,6 +952,78 @@ window.showSpoiler = function() {
     console.error('❌ Elemento countdown-overlay não encontrado');
   }
 };
+
+// Contagem regressiva para o Crov
+function initCrovCountdown() {
+  // Data final: 27 de agosto de 2025
+  const targetDate = new Date('2025-08-27T00:00:00');
+  
+  function updateCrovCountdown() {
+    const now = new Date();
+    const timeLeft = targetDate - now;
+    
+    const btn = document.getElementById('crov-download-btn');
+    const text = document.getElementById('crov-countdown-text');
+    
+    if (!btn || !text) return;
+    
+    if (timeLeft <= 0) {
+      // Contagem acabou, habilitar download
+      btn.classList.remove('soon');
+      btn.classList.add('download-ready');
+      text.textContent = lang === 'en' ? 'DOWNLOAD' : 'BAIXAR';
+      return;
+    }
+    
+    // Calcular dias, horas, minutos e segundos
+    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+    
+    // Atualizar texto do botão
+    if (lang === 'en') {
+      text.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    } else {
+      text.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+  }
+  
+  // Atualizar imediatamente
+  updateCrovCountdown();
+  
+  // Atualizar a cada segundo
+  setInterval(updateCrovCountdown, 1000);
+}
+
+// Função para download do Crov
+function downloadCrov() {
+  const btn = document.getElementById('crov-download-btn');
+  
+  if (btn.classList.contains('download-ready')) {
+    // Iniciar download
+    console.log('🚀 Iniciando download do CrovAV...');
+    
+    // Criar link de download
+    const link = document.createElement('a');
+    link.href = 'CrovAV-x86_64.AppImage';
+    link.download = 'CrovAV-x86_64.AppImage';
+    link.style.display = 'none';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Feedback visual
+    btn.textContent = lang === 'en' ? 'DOWNLOADING...' : 'BAIXANDO...';
+    btn.classList.add('downloading');
+    
+    setTimeout(() => {
+      btn.textContent = lang === 'en' ? 'DOWNLOAD' : 'BAIXAR';
+      btn.classList.remove('downloading');
+    }, 3000);
+  }
+}
 
 // Contagem regressiva
 function initCountdown() {
@@ -991,6 +1074,9 @@ function init() {
   
   // Inicializar contagem regressiva
   initCountdown();
+  
+  // Inicializar contagem regressiva do Crov
+  initCrovCountdown();
   
   // Testar se o botão SPOILER está funcionando
   setTimeout(() => {
